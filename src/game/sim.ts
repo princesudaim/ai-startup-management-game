@@ -249,7 +249,7 @@ export function tick(state: GameState): GameState {
   /* environment */
   s.powerPrice = Math.round(clamp(s.powerPrice + (rng() - 0.45) * 4 + (s.week > 150 ? 0.5 : 0), 52, 210));
   s.priceIndex = s.priceIndex * 1.002;
-  s.techLevel = Math.min(6, 1 + Math.floor((s.week - 1) / 48) + Math.floor(s.models.length / 4));
+  s.techLevel = Math.min(6, Math.floor((s.week - 1) / 48) + Math.floor(s.models.length / 4));
 
   /* rivals */
   for (const rv of s.rivals) {
@@ -432,6 +432,7 @@ export function tick(state: GameState): GameState {
 
 export function checkEndings(s: GameState) {
   if (s.ending) return;
+  if (s.trust > 11) s.flags.trustEstablished = true;
   const rivalBest = Math.max(...s.rivals.map((r) => r.capability), 0);
   const released = s.models.filter((m) => m.status === "released");
   const win = (kind: string, title: string, body: string) => {
@@ -440,7 +441,7 @@ export function checkEndings(s: GameState) {
   };
   if (s.cash < -1400) return win("lose", "Bankruptcy", "The bridge round did not close. The racks were sold at eleven cents on the dollar and the domain is now a parking page. Gradient Ascent ran for " + s.week + " weeks.");
   if (s.heatHome >= 100) return win("lose", "Licence Revoked", "The Compute Authority pulled your deployment licence. Servers go dark at midnight. Your models still exist — you just aren't allowed to let anyone talk to them.");
-  if (s.trust <= 11) return win("lose", "Catastrophic Incident Cascade", "Trust " + s.trust.toFixed(0) + ". Every headline now begins with your name and ends with a question mark. Enterprise churns out. The board asks you to 'pursue other opportunities'.");
+  if (s.flags.trustEstablished && s.trust <= 11) return win("lose", "Catastrophic Incident Cascade", "Trust " + s.trust.toFixed(0) + ". Every headline now begins with your name and ends with a question mark. Enterprise churns out. The board asks you to 'pursue other opportunities'.");
     if (s.bestCap >= rivalBest + 4 && s.bestCap >= 40 && s.trust >= 52 && released.length >= 3)
     return win("win", "Capability Breakthrough", "You got there first — capability " + s.bestCap.toFixed(0) + " against a best rival of " + rivalBest.toFixed(0) + ", with a Trust Score of " + s.trust.toFixed(0) + ". The scaling plot everyone teaches in 2035 has your lab's name in the corner. You defined an era, and mostly survived it.");
   if (s.trust >= 80 && s.cash >= 6000 && s.quartersProfitable >= 5)
@@ -479,6 +480,7 @@ export type Action =
   | { t: "resolve"; instId: string; choice: number }
   | { t: "dismissEvent"; instId: string }
   | { t: "restart" }
+  | { t: "raiseCapital" }
   | { t: "init" };
 
 export function apply(state: GameState, a: Action): GameState {
@@ -492,6 +494,13 @@ export function apply(state: GameState, a: Action): GameState {
   switch (a.t) {
     case "init":
       return init(state);
+    case "raiseCapital":
+      if (s.flags.awaitingStart) {
+        s.cash = 3400;
+        s.flags.awaitingStart = false;
+        log(s, "Pre-seed round closed. $3.4M is now available to build the lab.", "major");
+      }
+      break;
     case "speed":
       s.speed = a.v; s.paused = false; break;
     case "pause":
@@ -722,10 +731,10 @@ function init(base: GameState): GameState {
   base.rivals = JSON.parse(JSON.stringify(RIVALS));
   base.regions = makeRegions();
   base.segments = JSON.parse(JSON.stringify(SEGMENTS));
-  base.flags = {};
+  base.flags = { awaitingStart: true };
   base.ending = null;
   const rng = makeRng(20260101);
-  const tier = 1 + Math.floor(base.week / 80);
+  const tier = Math.floor(base.week / 80);
   base.candidates = Array.from({ length: 5 }, () => randomResearcher(rng, base.week, tier));
   return base;
 }

@@ -138,9 +138,9 @@ export function Intro({ onStart }: { onStart: () => void }) {
             onClick={onStart}
             className="rounded-md border border-cyan-400/50 bg-cyan-500/15 px-7 py-3 font-mono text-xs uppercase tracking-[0.2em] text-cyan-100 shadow-[0_0_30px_-8px] shadow-cyan-500/60 transition-all hover:bg-cyan-400/25"
           >
-            Sign the lease ▸
+            Raise pre-seed · $3.4M ▸
           </button>
-          <span className="font-mono text-[10px] text-slate-600">5-year horizon · three win states · three ways to lose the company</span>
+          <span className="font-mono text-[10px] text-slate-600">Starts at zero · funding is your first decision</span>
         </div>
       </div>
     </div>

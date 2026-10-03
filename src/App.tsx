@@ -11,8 +11,8 @@ import { cn } from "./utils/cn";
 import type { Tab } from "./game/types";
 
 function Game() {
+  const { s, dispatch } = useGame();
   const [tab, setTab] = useState<Tab>("lab");
-  const [intro, setIntro] = useState(true);
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-[#05070b]">
@@ -27,7 +27,7 @@ function Game() {
         {tab === "board" && <BoardPanel />}
       </main>
       <Ticker />
-      {intro && <Intro onStart={() => setIntro(false)} />}
+      {s.flags.awaitingStart && <Intro onStart={() => dispatch({ t: "raiseCapital" })} />}
       <EventModal />
       <EndingScreen />
     </div>

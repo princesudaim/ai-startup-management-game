@@ -189,7 +189,7 @@ export function BoardPanel() {
             <Goal
               title="Failure Modes"
               desc="Cash below −1.4M (bankruptcy) · heat 100 (licence revoked) · trust ≤11 (cascade)."
-              progress={Math.max(s.cash < 0 ? -s.cash / 1400 : 0, s.heatHome / 100, (30 - s.trust) / 30)}
+              progress={Math.max(s.cash < 0 ? -s.cash / 1400 : 0, s.heatHome / 100, s.flags.trustEstablished ? (30 - s.trust) / 30 : 0)}
               danger
               detail={`cash ${fmtK(s.cash)} · heat ${s.heatHome.toFixed(0)}/100 · trust ${s.trust.toFixed(0)}`}
             />

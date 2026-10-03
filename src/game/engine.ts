@@ -85,36 +85,29 @@ export function newGame(): GameState {
   const grid: Tile[] = [];
   for (let y = 0; y < GRID; y++) {
     for (let x = 0; x < GRID; x++) {
-      const inGarage = x < 4 && y < 3;
-      grid.push({ x, y, unlocked: inGarage });
+      grid.push({ x, y, unlocked: false });
     }
   }
-  const startIdx = grid.findIndex((t) => t.x === 1 && t.y === 1);
-  grid[startIdx].b = { id: "b1", kind: "rack", variant: "shelf", built: 0, condition: 1, units: 8, unitGen: "vulcan" };
-  const grid2 = grid;
   return {
     week: 1,
     year: 1,
-    cash: 3400,
+    cash: 0,
     debt: 0,
-    trust: 58,
-    awareness: 0.12,
-    heatHome: 10,
-    techLevel: 1,
+    trust: 0,
+    awareness: 0,
+    heatHome: 0,
+    techLevel: 0,
     brand: "Gradient Ascent",
     labName: "Gradient Ascent",
-    grid: grid2,
-    researchers: [
-      { id: "r1", name: "Ines Marchetti", field: "capability", skill: 5, ego: 0.4, salary: 5.4, burnout: 0, morale: 0.8 },
-      { id: "r2", name: "Otto Lindqvist", field: "infra", skill: 4, ego: 0.25, salary: 4.2, burnout: 0, morale: 0.82 },
-    ],
+    grid,
+    researchers: [],
     candidates: [],
     models: [],
     run: null,
     runHistory: [],
     events: [],
     queue: [],
-    log: [{ week: 1, text: "Lease signed on a 40m² unit in the Ravel Industrial Park. Two GPUs short of a dream.", tone: "neutral" }],
+    log: [{ week: 1, text: "Gradient Ascent is an idea, not a company. No funding, staff, or equipment yet.", tone: "neutral" }],
     rivals: [],
     regions: [],
     segments: [],
@@ -127,10 +120,10 @@ export function newGame(): GameState {
     revenueHistory: [],
     expenseHistory: [],
     history: [],
-    inferenceShare: 0.6,
+    inferenceShare: 0,
     lastQuarter: 0,
     quartersProfitable: 0,
-    valuation: 30,
+    valuation: 0,
     ending: null,
     tutorialStep: 0,
     speed: 1,
