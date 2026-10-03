@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: #05070b;
+  color: #e2e8f0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ga-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+.ga-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0b0f16;
+  border: 2px solid var(--accent, #22d3ee);
+  box-shadow: 0 0 8px -1px var(--accent, #22d3ee);
+  cursor: grab;
+}
+.ga-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #0b0f16;
+  border: 2px solid var(--accent, #22d3ee);
+}
+
+/* isometric scene */
+.iso-scene {
+  perspective: 2000px;
+  perspective-origin: 50% 42%;
+}
+.iso-world {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.iso-tile {
+  transform-style: preserve-3d;
+}
+.iso-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.iso-face {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+@keyframes ga-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+.ga-led { animation: ga-pulse 2.4s ease-in-out infinite; }
+
+@keyframes ga-scan {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(400%); }
+}
+.ga-scan { animation: ga-scan 3.5s linear infinite; }
+
+@keyframes ga-fadein {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.ga-in { animation: ga-fadein 0.28s ease-out both; }
+
+@keyframes ga-blink { 50% { opacity: 0.25 } }
+.ga-blink { animation: ga-blink 1.1s step-end infinite; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.25); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.4); }
+
+.ga-grid-bg {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
